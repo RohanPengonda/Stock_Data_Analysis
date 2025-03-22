@@ -20,7 +20,7 @@ public class StockService {
             Path tempFile = Files.createTempFile("stock_data", ".csv");
             Files.copy(file.getInputStream(), tempFile, StandardCopyOption.REPLACE_EXISTING);
 
-            ProcessBuilder pb = new ProcessBuilder("python3", "python-script/analyze.py", tempFile.toString());
+            ProcessBuilder pb = new ProcessBuilder("python", "../../Python/analyze.py", tempFile.toString());
             Process process = pb.start();
             process.waitFor();
 
