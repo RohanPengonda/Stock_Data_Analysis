@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
+import "./Upload.css";
 
 const UploadFile = () => {
   const [file, setFile] = useState(null);
   const [message, setMessage] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
 
   const uploadFile = async () => {
     if (!file) {
@@ -20,30 +22,29 @@ const UploadFile = () => {
         formData
       );
       setMessage(response.data);
+      setTimeout(() => fetchImage(), 3000); // Wait for processing
     } catch (error) {
       setMessage("Error uploading file.");
     }
   };
 
+  const fetchImage = () => {
+    setImageUrl(
+      `http://localhost:8080/api/trend-image?timestamp=${new Date().getTime()}`
+    );
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center py-4">
-      <h1 className="text-red-500 text-center font-semibold">
-        Stock Analysis - Assignment
-      </h1>
-      <div
-        className="flex flex-col justify-between
-    px-1 py-4"
-      >
-        <input
-          className="border p-1"
-          type="file"
-          onChange={(e) => setFile(e.target.files[0])}
-        />
-        <button className="bg-red-200 p-1 border " onClick={uploadFile}>
-          Upload & Analyze
-        </button>
-        <p>{message}</p>
-      </div>
+    <div className="upload-container">
+      <h1 className="text-h1">Upload Data (CSV)</h1>
+      <label className="upload-label">
+        <input type="file" onChange={(e) => setFile(e.target.files[0])} />
+      </label>
+      <button className="upload-btn" onClick={uploadFile}>
+        Upload & Analyze
+      </button>
+      <p className="message">{message}</p>
+      {imageUrl && <img className="stock-image" src={imageUrl} alt="Data" />}
     </div>
   );
 };
